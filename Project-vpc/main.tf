@@ -46,28 +46,28 @@ resource "aws_route_table_association" "rta2"{
 
 #creating security group
 resource   "aws_security_group" "mysg"{
-    name="my-sg"
+    name="mysg"
     description="creating securit group"
- vpc_id=aws_vpc.my_vpc.id
-     ingress={
+    vpc_id=aws_vpc.my_vpc.id
+     ingress{
         description="http"
         from_port=80
         to_port=80
-        protocal="tcp"
+        protocol="tcp"
         cidr_block=["0.0.0.0/0"]
 
     }
-     ingress={
+     ingress{
         description="ssh"
         from_port=22
         to_port=22
-         protocal="tcp"
+        protocol="tcp"
         cidr_block=["0.0.0.0/0"]
     }
     egress{
         from_port=0
         to_port=0
-        protocal="-1"
+        protocol="-1"
         cidr_block=["0.0.0.0/0"]
     }
     tags={
@@ -82,17 +82,14 @@ resource "aws_s3_bucket" "vinay"{
         name="my bucket"
     }
 }
-
-#macking bucket public
-
-
 #creating ec2 instances
 resource "aws_instance" "webserver1"{
 ami="ami-053b0d53c279acc90"
 instance_type="t2.micro"
 vpc_security_group_ids=[aws_security_group.mysg.id]
 subnet_id=aws_subnet.sub1.id
-user_data=base64encode(file{ec2-instance-1.sh})
+key_name="vinay"
+user_data= base64encode(file("ec2-instance-1.sh"))
 }
 
 resource "aws_instance" "webserver2"{
@@ -100,5 +97,6 @@ ami="ami-053b0d53c279acc90"
 instance_type="t2.micro"
 vpc_security_group_ids=[aws_security_group.mysg.id]
 subnet_id=aws_subnet.sub2.id
-user_data=base64encode(file{ec2-instance-2.sh})
+key_name="vinay"
+user_data= base64encode(file("ec2-instance-2.sh"))
 }

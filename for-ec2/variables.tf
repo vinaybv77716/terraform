@@ -17,3 +17,8 @@ variable subnet_id{
   default     = "subnet-07d812236e8f63f3b"
   description = "value of Subnet-ID" 
 }
+
+variable name{
+  type=string
+  default="mys3bucketforremotebackend"
+}
