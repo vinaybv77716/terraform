@@ -18,7 +18,7 @@ variable subnet_id{
   description = "value of Subnet-ID" 
 }
 
-variable name{
+variable bucket{
   type=string
   default="mys3bucketforremotebackend"
 }

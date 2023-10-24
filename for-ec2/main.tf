@@ -1,5 +1,5 @@
-resource "aws_s3_bicket" "example"{
-    name=var.name #bucketname=mys3bucketforremotebackend
+resource "aws_s3_bucket" "example"{
+    bucket=var.bucket #bucketname=mys3bucketforremotebackend
 }
 
 
