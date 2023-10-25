@@ -10,8 +10,8 @@ variable "instance"{
     description="t2.micro"
 }
 
-module name {
+module "ec2" {
   source = "./module/ec2"
   ami=var.ami
-  instance_type=var.instance  
+  instance=var.instance  
 }
