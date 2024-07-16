@@ -1,6 +1,8 @@
+
+
 #   creating VPC
 resource "aws_vpc" "my_vpc"{
-cidr_block=var.cidr
+cidr_block="10.0.0.0/16"
 }
 
 #   creating subnet1
@@ -12,12 +14,12 @@ resource "aws_subnet" "sub1"{
 }
 
 #   creating subnet2
-resource "aws_subnet" "sub2"{
-    vpc_id              =   aws_vpc.my_vpc.id
-    cidr_block          =   "10.0.1.0/24"
-    availability_zone   =   "us-east-1b"
-    map_public_ip_on_launch =   true
-}
+#resource "aws_subnet" "sub2"{
+ #   vpc_id              =   aws_vpc.my_vpc.id
+  #  cidr_block          =   "10.0.1.0/24"
+   # availability_zone   =   "us-east-1b"
+    #map_public_ip_on_launch =   true
+#}
 
 #   creating internet gateway
 resource "aws_internet_gateway" "my_gateway"{
@@ -38,10 +40,10 @@ resource "aws_route_table_association" "rta1"{
     route_table_id=aws_route_table.rt.id
 }
 
-resource "aws_route_table_association" "rta2"{
-    subnet_id=aws_subnet.sub2.id
-    route_table_id=aws_route_table.rt.id
-}
+#resource "aws_route_table_association" "rta2"{
+ #   subnet_id=aws_subnet.sub2.id
+  #  route_table_id=aws_route_table.rt.id
+#}
 
 
 #creating security group
@@ -54,7 +56,7 @@ resource   "aws_security_group" "mysg"{
         from_port=80
         to_port=80
         protocol="tcp"
-        cidr_block=["0.0.0.0/0"]
+        cidr_blocks=["0.0.0.0/0"]
 
     }
      ingress{
@@ -62,13 +64,13 @@ resource   "aws_security_group" "mysg"{
         from_port=22
         to_port=22
         protocol="tcp"
-        cidr_block=["0.0.0.0/0"]
+        cidr_blocks=["0.0.0.0/0"]
     }
     egress{
         from_port=0
         to_port=0
         protocol="-1"
-        cidr_block=["0.0.0.0/0"]
+        cidr_blocks=["0.0.0.0/0"]
     }
     tags={
         name="my-security-group"
@@ -76,27 +78,38 @@ resource   "aws_security_group" "mysg"{
 }
 
 # creating s3 bucket
-resource "aws_s3_bucket" "vinay"{
-    bucket="vinay_pruthiv_s3_bucket_hosting_web_server_in_s3_bucket"
-    tags={
-        name="my bucket"
-    }
-}
+#resource "aws_s3_bucket" "vinay"{
+ #   bucket="vinay_pruthiv_s3_bucket_hosting_web_server_in_s3_bucket"
+  #  tags={
+   #     name="my bucket"
+    #}
+#}
 #creating ec2 instances
 resource "aws_instance" "webserver1"{
-ami="ami-053b0d53c279acc90"
+ami="ami-04a81a99f5ec58529"
 instance_type="t2.micro"
 vpc_security_group_ids=[aws_security_group.mysg.id]
 subnet_id=aws_subnet.sub1.id
-key_name="vinay"
-user_data= base64encode(file("ec2-instance-1.sh"))
+key_name="Ex"
+#user_data= base64encode(file("ec2-instance-1.sh"))
 }
 
-resource "aws_instance" "webserver2"{
-ami="ami-053b0d53c279acc90"
-instance_type="t2.micro"
-vpc_security_group_ids=[aws_security_group.mysg.id]
-subnet_id=aws_subnet.sub2.id
-key_name="vinay"
-user_data= base64encode(file("ec2-instance-2.sh"))
+#resource "aws_instance" "webserver2"{
+#ami="ami-053b0d53c279acc90"
+#instance_type="t2.micro"
+#vpc_security_group_ids=[aws_security_group.mysg.id]
+#subnet_id=aws_subnet.sub2.id
+#key_name="vinay"
+#user_data= base64encode(file("ec2-instance-2.sh"))
+#}
+
+resource "aws_ebs_volume" "example_volume" {
+  availability_zone = "us-east-1a" # Change to match your instance's AZ
+  size              = 30 # Size in GB
+}
+
+resource "aws_volume_attachment" "example_attachment" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.example_volume.id
+  instance_id = aws_instance.webserver1.id
 }
