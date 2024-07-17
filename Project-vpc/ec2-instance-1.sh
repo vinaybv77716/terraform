@@ -19,4 +19,4 @@ sudo apt update
 sudo apt install docker.io -y
 sudo chown $USER /var/run/docker.sock
  docker login -u bvvinay -p Bvv@22188
-docker run bvvinay/prime
+docker run -p 80:80 bvvinay/prime
