@@ -113,3 +113,7 @@ resource "aws_volume_attachment" "example_attachment" {
   volume_id   = aws_ebs_volume.example_volume.id
   instance_id = aws_instance.webserver1.id
 }
+
+output "ebs_volume_id" {
+  value = aws_ebs_volume.example_volume.id
+}
